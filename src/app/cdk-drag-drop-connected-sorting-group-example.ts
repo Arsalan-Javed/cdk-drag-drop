@@ -14,7 +14,9 @@ import { NgxSpinnerService } from 'ngx-spinner';
 })
 export class CdkDragDropConnectedSortingGroupExample {
 
-  ApiResponse=true;
+  ApiResponse = true;
+  isDisabled = false;
+  evenPredicate_ = true;
   constructor(private spinner: NgxSpinnerService) {}
   
   todo = [
@@ -34,15 +36,26 @@ export class CdkDragDropConnectedSortingGroupExample {
 
   drop(event: CdkDragDrop<string[]>) {
 
-    this.spinner.show();
+    var name="";
+    if (event.previousContainer === event.container) {
+      name = event.container.data[event.previousIndex];
+    }
+    else{
+      name = event.previousContainer.data[event.previousIndex];
+    }
+    
+    this.spinner.show(name);
+    this.isDisabled = true;
     of(this.ApiResponse).pipe(delay(5000)).subscribe(res=>{
-      this.spinner.hide();
+      this.spinner.hide(name);
+      this.isDisabled = false;
       if(res){
         // stay there
       }
       else{
           // go back
          this.goback(event);
+         this.evenPredicate_=false;
       }
     });
     
@@ -68,4 +81,13 @@ export class CdkDragDropConnectedSortingGroupExample {
                         event.previousIndex,event.currentIndex);
     }
   }
+
+  noReturnPredicate() {
+    return false;
+  }
+
+  evenPredicate(){
+    return this.evenPredicate_;
+  }
+
 }

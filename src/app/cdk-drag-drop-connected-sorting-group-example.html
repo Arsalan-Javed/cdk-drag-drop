@@ -12,9 +12,14 @@
       cdkDropList
       [cdkDropListData]="todo"
       class="example-list"
+      [cdkDropListDisabled]="isDisabled"
       (cdkDropListDropped)="drop($event)">
-      <div class="example-box" *ngFor="let item of todo" cdkDrag>{{item}}</div>
+      <div class="example-box cdk-drag-animating"  *ngFor="let item of todo" cdkDrag>
+        {{item}}
+        <ngx-spinner [name]="item" bdColor="rgba(110,235,167,0.8)" size = "small" color = "#dd7878" type = "square-jelly-box" [fullScreen] = "false"></ngx-spinner>
+      </div>
     </div>
+    
   </div>
 
   <div class="example-container">
@@ -24,14 +29,17 @@
       cdkDropList
       [cdkDropListData]="done"
       class="example-list"
+      [cdkDropListDisabled]="isDisabled"
       (cdkDropListDropped)="drop($event)">
-      <div class="example-box" *ngFor="let item of done" cdkDrag>{{item}}</div>
+      <div class="example-box" *ngFor="let item of done" cdkDrag>
+        {{item}}
+        <ngx-spinner [name]="item" bdColor="rgba(110,235,167,0.8)" size = "small" color = "#dd7878" type = "square-jelly-box" [fullScreen] = "false"></ngx-spinner>
+      </div>
     </div>
+    
   </div>
 
-  <ngx-spinner bdColor = "rgba(110,235,167,0.8)" size = "large" color = "#dd7878" type = "square-jelly-box" [fullScreen] = "false">
-    <p style="color: white" > Loading... </p>
-  </ngx-spinner>
+  
 </div>
 
 
