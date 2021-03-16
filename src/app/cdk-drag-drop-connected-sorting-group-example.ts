@@ -1,5 +1,8 @@
 import {Component} from '@angular/core';
 import {CdkDragDrop, moveItemInArray, transferArrayItem} from '@angular/cdk/drag-drop';
+import { of } from 'rxjs';
+import { delay } from 'rxjs/operators';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 /**
  * @title Drag&Drop connected sorting group
@@ -10,6 +13,9 @@ import {CdkDragDrop, moveItemInArray, transferArrayItem} from '@angular/cdk/drag
   styleUrls: ['cdk-drag-drop-connected-sorting-group-example.css'],
 })
 export class CdkDragDropConnectedSortingGroupExample {
+
+  constructor(private spinner: NgxSpinnerService) {}
+  
   todo = [
     'Get to work',
     'Pick up groceries',
@@ -26,18 +32,22 @@ export class CdkDragDropConnectedSortingGroupExample {
   ];
 
   drop(event: CdkDragDrop<string[]>) {
-    if (event.previousContainer === event.container) {
-      moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
-    } else {
-      transferArrayItem(event.previousContainer.data,
-                        event.container.data,
-                        event.previousIndex,
-                        event.currentIndex);
-    }
+
+    let fakeResponse = true;
+    this.spinner.show();
+    of(fakeResponse).pipe(delay(5000)).subscribe(res=>{
+      this.spinner.hide();
+      if(res){
+        if (event.previousContainer === event.container) {
+          moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
+        } else {
+          transferArrayItem(event.previousContainer.data,
+                            event.container.data,
+                            event.previousIndex,
+                            event.currentIndex);
+        }
+      }
+    });
+    return false;
   }
 }
-
-
-/**  Copyright 2020 Google LLC. All Rights Reserved.
-    Use of this source code is governed by an MIT-style license that
-    can be found in the LICENSE file at http://angular.io/license */
