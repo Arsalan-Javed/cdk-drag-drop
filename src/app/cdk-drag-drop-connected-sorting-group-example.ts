@@ -14,6 +14,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
 })
 export class CdkDragDropConnectedSortingGroupExample {
 
+  ApiResponse=true;
   constructor(private spinner: NgxSpinnerService) {}
   
   todo = [
@@ -33,21 +34,38 @@ export class CdkDragDropConnectedSortingGroupExample {
 
   drop(event: CdkDragDrop<string[]>) {
 
-    let fakeResponse = true;
     this.spinner.show();
-    of(fakeResponse).pipe(delay(5000)).subscribe(res=>{
+    of(this.ApiResponse).pipe(delay(5000)).subscribe(res=>{
       this.spinner.hide();
       if(res){
-        if (event.previousContainer === event.container) {
-          moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
-        } else {
-          transferArrayItem(event.previousContainer.data,
-                            event.container.data,
-                            event.previousIndex,
-                            event.currentIndex);
-        }
+        // stay there
+      }
+      else{
+          // go back
+         this.goback(event);
       }
     });
-    return false;
+    
+    this.goforward(event);
+  }
+
+  goback(event:any){
+    if (event.previousContainer === event.container) {
+      moveItemInArray(event.container.data, event.currentIndex, event.previousIndex);
+    } else {
+      transferArrayItem(event.container.data,
+                        event.previousContainer.data,
+                        event.currentIndex,event.previousIndex);
+    }
+  }
+
+  goforward(event:any){
+    if (event.previousContainer === event.container) {
+      moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
+    } else {
+      transferArrayItem(event.previousContainer.data,
+                        event.container.data,
+                        event.previousIndex,event.currentIndex);
+    }
   }
 }
